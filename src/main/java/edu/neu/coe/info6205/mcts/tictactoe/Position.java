@@ -61,10 +61,13 @@ public class Position {
         int[][] matrix = copyGrid();
         if (matrix[x][y] < 0) {
             // TO BE IMPLEMENTED 
-             return null;
+            matrix[x][y] = player;
+            return new Position(matrix, count + 1, player);
             // END SOLUTION
         }
-        throw new RuntimeException("Position is occupied: " + x + ", " + y);
+        else {
+            throw new RuntimeException("Position is occupied: " + x + ", " + y);
+        }
     }
 
     /**
@@ -77,8 +80,11 @@ public class Position {
         List<int[]> result = new ArrayList<>();
         for (int i = 0; i < gridSize; i++)
             for (int j = 0; j < gridSize; j++)
-                if (grid[i][j] < 0)
-                    // TO BE IMPLEMENTED 
+                if (grid[i][j] < 0){
+                     // TO BE IMPLEMENTED
+                    result.add(new int[]{i,j});
+                }
+
          ;
         // END SOLUTION
         return result;
@@ -141,8 +147,16 @@ public class Position {
      */
     boolean threeInARow() {
         // TO BE IMPLEMENTED 
-         return false;
+        for (int i = 0; i < gridSize; i++) {
+            if (checkLine(projectRow(i)) || checkLine(projectCol(i))) {
+                return true;
+            }
+        }
+        return checkLine(projectDiag(true)) || checkLine(projectDiag(false));
         // END SOLUTION
+    }
+    private boolean checkLine(int[] line) {
+        return line[0] == last && line[1] == last && line[2] == last;
     }
 
     /**

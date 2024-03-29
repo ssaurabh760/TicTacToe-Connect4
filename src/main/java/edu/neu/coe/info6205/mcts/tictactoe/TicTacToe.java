@@ -20,6 +20,9 @@ public class TicTacToe implements Game<TicTacToe> {
         State<TicTacToe> state = new TicTacToe().runGame();
         if (state.winner().isPresent()) System.out.println("TicTacToe: winner is: " + state.winner().get());
         else System.out.println("TicTacToe: draw");
+        TicTacToeState ticTacToeState = (TicTacToeState) state;
+        Position position = ticTacToeState.position();
+        System.out.println("Current Position:\n" + position.render());
     }
 
     public static final int X = 1;
