@@ -17,13 +17,37 @@ public class TicTacToe implements Game<TicTacToe> {
      */
     public static void main(String[] args) {
         // NOTE the behavior of the game to be run will be based on the TicTacToe instance field: random.
-        State<TicTacToe> state = new TicTacToe().runGame();
-        if (state.winner().isPresent()) System.out.println("TicTacToe: winner is: " + state.winner().get());
-        else System.out.println("TicTacToe: draw");
-        TicTacToeState ticTacToeState = (TicTacToeState) state;
-        Position position = ticTacToeState.position();
-        System.out.println("Current Position:\n" + position.render());
+        int[] totalGames = new int[]{100, 200, 400, 800, 1600, 3200};
+
+        for (int i = 0; i < totalGames.length; i++) {
+
+
+            int n = totalGames[i];
+            int player0Count = 0;
+            int player1Count = 0;
+
+            for (int j = 0; j < n; j++) {
+
+                State<TicTacToe> state = new TicTacToe().runGame();
+                if (state.winner().isPresent()) {
+                    if (state.winner().get() == 1) {
+                        player1Count++;
+                    } else {
+                        player0Count++;
+                    }
+
+
+                }
+            }
+            System.out.println("Total Games: " + n);
+            System.out.println("Player 1 (X) Wins: " + player1Count);
+            System.out.println("Player 0 (O) Wins: " + player0Count);
+            System.out.println("Draws: " + (n - player1Count - player0Count));
+            System.out.println("--------------------");
+
+        }
     }
+
 
     public static final int X = 1;
     public static final int O = 0;
