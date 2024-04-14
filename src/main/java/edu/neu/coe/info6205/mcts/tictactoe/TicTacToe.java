@@ -4,48 +4,87 @@ import edu.neu.coe.info6205.mcts.core.Game;
 import edu.neu.coe.info6205.mcts.core.Move;
 import edu.neu.coe.info6205.mcts.core.State;
 
+import java.util.Scanner;
+
 import java.util.*;
 
 /**
  * Class which models the game of TicTacToe.
  */
 public class TicTacToe implements Game<TicTacToe> {
+
+    public int[] getRandomMove(TicTacToe game, Position position, int player) {
+        List<int[]> availableMoves = new ArrayList<>();
+
+        // Find all available moves
+        for (int i = 0; i < Position.gridSize; i++) {
+            for (int j = 0; j < Position.gridSize; j++) {
+                if (position.grid[i][j] == TicTacToe.blank) {
+
+                    availableMoves.add(new int[]{i, j});
+
+                }
+            }
+        }
+
+
+
+        Random random = new Random();
+        return availableMoves.get(random.nextInt(availableMoves.size()));
+    }
     /**
      * Main program to run a random TicTacToe game.
      *
      * @param args command-line arguments.
      */
     public static void main(String[] args) {
-        // NOTE the behavior of the game to be run will be based on the TicTacToe instance field: random.
-        int[] totalGames = new int[]{100, 200, 400, 800, 1600, 3200};
 
-        for (int i = 0; i < totalGames.length; i++) {
+        TicTacToe ticTacToe = new TicTacToe();
+        Position position = Position.parsePosition(". . .\n. . .\n. . .", TicTacToe.blank);
+        int currentPlayer = TicTacToe.X;
+        Scanner scanner = new Scanner(System.in);
+        TicTacToe game = new TicTacToe();
 
-
-            int n = totalGames[i];
-            int player0Count = 0;
-            int player1Count = 0;
-
-            for (int j = 0; j < n; j++) {
-
-                State<TicTacToe> state = new TicTacToe().runGame();
-                if (state.winner().isPresent()) {
-                    if (state.winner().get() == 1) {
-                        player1Count++;
-                    } else {
-                        player0Count++;
-                    }
+        State<TicTacToe> state = game.start();
 
 
+        while (!state.isTerminal()) {
+            System.out.println(state);
+
+
+            if (currentPlayer == TicTacToe.X) {
+                System.out.println("Enter your move (row column):");
+                int row = scanner.nextInt();
+                int column = scanner.nextInt();
+                state = state.next(new TicTacToeMove(currentPlayer, row, column));
+            } else {
+
+
+
+                int[] randomMove = game.getRandomMove(ticTacToe, position, currentPlayer);
+                if (randomMove != null) {
+                    state = state.next(new TicTacToeMove(currentPlayer, randomMove[0], randomMove[1]));
                 }
-            }
-            System.out.println("Total Games: " + n);
-            System.out.println("Player 1 (X) Wins: " + player1Count);
-            System.out.println("Player 0 (O) Wins: " + player0Count);
-            System.out.println("Draws: " + (n - player1Count - player0Count));
-            System.out.println("--------------------");
 
+            }
+
+            currentPlayer = 1 - currentPlayer;
         }
+
+        System.out.println(state);
+        if (state.winner().isPresent()) {
+            int winner = state.winner().get();
+            if (winner == TicTacToe.X) {
+                System.out.println("Winner: X");
+            } else {
+                System.out.println("Winner: O");
+            }
+        } else {
+            System.out.println("It's a draw!");
+        }
+
+        scanner.close();
+
     }
 
 
@@ -71,9 +110,11 @@ public class TicTacToe implements Game<TicTacToe> {
         State<TicTacToe> state = start();
         int player = opener();
         while (!state.isTerminal()) {
+            System.out.println(state.toString());
             state = state.next(state.chooseMove(player));
             player = 1 - player;
         }
+        System.out.println(state.toString());
         return state;
     }
 
@@ -163,6 +204,7 @@ public class TicTacToe implements Game<TicTacToe> {
      * Inner class to define a State of TicTacToe.
      */
     class TicTacToeState implements State<TicTacToe> {
+
         /**
          * Method to yield the game of which this is a State.
          *
@@ -236,7 +278,16 @@ public class TicTacToe implements Game<TicTacToe> {
         public State<TicTacToe> next(Move<TicTacToe> move) {
             TicTacToeMove ticTacToeMove = (TicTacToeMove) move;
             int[] ints = ticTacToeMove.move();
-            return new TicTacToeState(position.move(move.player(), ints[0], ints[1]));
+            // Check if the position is already occupied
+
+            if (position.grid[ints[0]][ints[1]] != TicTacToe.blank) {
+
+                throw new RuntimeException("Position is occupied: " + ints[0] + ", " + ints[1]);
+
+            }
+            Position newPosition = position.move(move.player(), ints[0], ints[1]);
+
+            return new TicTacToeState(newPosition);
         }
 
         /**
@@ -250,9 +301,9 @@ public class TicTacToe implements Game<TicTacToe> {
 
         @Override
         public String toString() {
-            return "TicTacToe{\n" +
-                    position +
-                    "\n}";
+            return "TicTacToe\n" +
+                           position.render() +
+                           "\n";
         }
 
         public TicTacToeState(Position position) {

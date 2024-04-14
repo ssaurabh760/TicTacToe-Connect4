@@ -146,17 +146,27 @@ public class Position {
      * @return true if there are three cells in a line that are the same and equal to the last player.
      */
     boolean threeInARow() {
-        // TO BE IMPLEMENTED 
+
+        // Check rows and columns
+
         for (int i = 0; i < gridSize; i++) {
-            if (checkLine(projectRow(i)) || checkLine(projectCol(i))) {
+
+            if ((projectRow(i)[0] == last && projectRow(i)[1] == last && projectRow(i)[2] == last) ||
+
+                        (projectCol(i)[0] == last && projectCol(i)[1] == last && projectCol(i)[2] == last)) {
+
                 return true;
+
             }
+
         }
-        return checkLine(projectDiag(true)) || checkLine(projectDiag(false));
-        // END SOLUTION
-    }
-    private boolean checkLine(int[] line) {
-        return line[0] == last && line[1] == last && line[2] == last;
+
+        // Check diagonals
+
+        return (grid[0][0] == last && grid[1][1] == last && grid[2][2] == last) ||
+
+                       (grid[0][2] == last && grid[1][1] == last && grid[2][0] == last);
+
     }
 
     /**
@@ -284,9 +294,9 @@ public class Position {
         matrix[i2][j2] = temp;
     }
 
-    private final int[][] grid;
+    public final int[][] grid;
     final int last;
     private final int count;
-    private final static int gridSize = 3;
+    public final static int gridSize = 3;
     private final int[] xxx;
 }
