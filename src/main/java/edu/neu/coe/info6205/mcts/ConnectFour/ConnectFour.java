@@ -16,6 +16,12 @@ public class ConnectFour implements Game<ConnectFour> {
     public static final int O = 0;
     public static final int blank = -1;
 
+    private final Random random;
+
+    public ConnectFour(Random random) {
+        this.random = random;
+    }
+
     /**
      * Method to yield a starting position.
      *
@@ -45,7 +51,15 @@ public class ConnectFour implements Game<ConnectFour> {
 
     private class ConnectFourState implements State<ConnectFour> {
 
+
         private final ConnectFourPosition connectFourPosition;
+
+        @Override
+        public String toString() {
+            return "TicTacToe{\n" +
+                    connectFourPosition +
+                    "\n}";
+        }
 
         public ConnectFourState(ConnectFourPosition position) {
             this.connectFourPosition = position;
@@ -57,36 +71,47 @@ public class ConnectFour implements Game<ConnectFour> {
 
         @Override
         public ConnectFour game() {
-            return null;
+            return ConnectFour.this;
         }
 
         @Override
         public boolean isTerminal() {
-            return false;
+            //return position.full() || position.winner().isPresent();
+            return connectFourPosition.full() || connectFourPosition.winner().isPresent();
         }
 
         @Override
         public int player() {
-            return 0;
+            return switch (connectFourPosition.last) {
+                case 0, -1 -> X;
+                case 1 -> O;
+                default -> blank;
+            };
+        }
+
+        public ConnectFourPosition connectFourPosition(){
+            return this.connectFourPosition;
         }
 
         @Override
         public Optional<Integer> winner() {
-            return Optional.empty();
+            return connectFourPosition.winner();
         }
 
         @Override
         public Random random() {
-            return null;
+            return random;
         }
 
         @Override
         public Collection<Move<ConnectFour>> moves(int player) {
+            //Yet to implement
             return null;
         }
 
         @Override
         public State<ConnectFour> next(Move<ConnectFour> move) {
+            //Yet to implement
             return null;
         }
 

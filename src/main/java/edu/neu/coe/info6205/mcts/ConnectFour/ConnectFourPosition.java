@@ -3,6 +3,8 @@ package edu.neu.coe.info6205.mcts.ConnectFour;
 
 import edu.neu.coe.info6205.mcts.tictactoe.Position;
 
+import java.util.Optional;
+
 public class ConnectFourPosition {
 
     private final int[][] grid;
@@ -49,5 +51,14 @@ public class ConnectFourPosition {
             }
         }
         return new ConnectFourPosition(matrix, count, last);
+    }
+
+    public Optional<Integer> winner() {
+        // Yet to implement
+        return Optional.empty();
+    }
+
+    public boolean full() {
+        return count == 36;
     }
 }
