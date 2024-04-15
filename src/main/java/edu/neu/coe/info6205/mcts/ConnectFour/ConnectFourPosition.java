@@ -1,21 +1,16 @@
 package edu.neu.coe.info6205.mcts.ConnectFour;
 
-
-import edu.neu.coe.info6205.mcts.tictactoe.Position;
-
 import java.util.Optional;
 
 public class ConnectFourPosition {
 
-    private final int[][] grid;
+    final int[][] grid;
     final int last;
-    private final int count;
+    final int count;
     private final int[] xxx;
 
-    private final static int gridColumns = 6;
-
-    private final static int gridRows = 6;
-
+    static final int gridColumns = 7;
+    static final int gridRows = 6;
 
     ConnectFourPosition(int[][] grid, int count, int last) {
         this.grid = grid;
@@ -54,11 +49,32 @@ public class ConnectFourPosition {
     }
 
     public Optional<Integer> winner() {
-        // Yet to implement
+        for (int i = 0; i < gridRows; i++) {
+            for (int j = 0; j < gridColumns; j++) {
+                int player = grid[i][j];
+                if (player == -1) continue; // Skip empty cells
+                // Check horizontal
+                if (j + 3 < gridColumns && grid[i][j + 1] == player && grid[i][j + 2] == player && grid[i][j + 3] == player) {
+                    return Optional.of(player);
+                }
+                // Check vertical
+                if (i + 3 < gridRows && grid[i + 1][j] == player && grid[i + 2][j] == player && grid[i + 3][j] == player) {
+                    return Optional.of(player);
+                }
+                // Check diagonal (up-right)
+                if (i + 3 < gridRows && j + 3 < gridColumns && grid[i + 1][j + 1] == player && grid[i + 2][j + 2] == player && grid[i + 3][j + 3] == player) {
+                    return Optional.of(player);
+                }
+                // Check diagonal (up-left)
+                if (i + 3 < gridRows && j - 3 >= 0 && grid[i + 1][j - 1] == player && grid[i + 2][j - 2] == player && grid[i + 3][j - 3] == player) {
+                    return Optional.of(player);
+                }
+            }
+        }
         return Optional.empty();
     }
 
     public boolean full() {
-        return count == 36;
+        return count == gridRows * gridColumns;
     }
 }
