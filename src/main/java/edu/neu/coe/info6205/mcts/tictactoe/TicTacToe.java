@@ -2,6 +2,7 @@ package edu.neu.coe.info6205.mcts.tictactoe;
 
 import edu.neu.coe.info6205.mcts.core.Game;
 import edu.neu.coe.info6205.mcts.core.Move;
+import edu.neu.coe.info6205.mcts.core.Node;
 import edu.neu.coe.info6205.mcts.core.State;
 
 import java.util.*;
@@ -17,37 +18,14 @@ public class TicTacToe implements Game<TicTacToe> {
      */
     public static void main(String[] args) {
         // NOTE the behavior of the game to be run will be based on the TicTacToe instance field: random.
-        int[] totalGames = new int[]{100, 200, 400, 800, 1600, 3200};
-
-        for (int i = 0; i < totalGames.length; i++) {
-
-
-            int n = totalGames[i];
-            int player0Count = 0;
-            int player1Count = 0;
-
-            for (int j = 0; j < n; j++) {
-
-                State<TicTacToe> state = new TicTacToe().runGame();
-                if (state.winner().isPresent()) {
-                    if (state.winner().get() == 1) {
-                        player1Count++;
-                    } else {
-                        player0Count++;
-                    }
-
-
-                }
-            }
-            System.out.println("Total Games: " + n);
-            System.out.println("Player 1 (X) Wins: " + player1Count);
-            System.out.println("Player 0 (O) Wins: " + player0Count);
-            System.out.println("Draws: " + (n - player1Count - player0Count));
-            System.out.println("--------------------");
-
+        State<TicTacToe> state = new TicTacToe().runGame();
+        if (state.winner().isPresent()) {
+            int winner = state.winner().get();
+            if(winner == 1) System.out.println("TicTacToe: winner is: X");
+            else System.out.println("TicTacToe: winner is: 0");
         }
+        else System.out.println("TicTacToe: draw");
     }
-
 
     public static final int X = 1;
     public static final int O = 0;
@@ -69,13 +47,23 @@ public class TicTacToe implements Game<TicTacToe> {
      */
     State<TicTacToe> runGame() {
         State<TicTacToe> state = start();
-        int player = opener();
+        MCTS mcts = new MCTS(new TicTacToeNode(state)); // Initialize MCTS with the starting state
+
         while (!state.isTerminal()) {
-            state = state.next(state.chooseMove(player));
-            player = 1 - player;
+            System.out.println(state.toString());
+            mcts.run(1000);
+            Node<TicTacToe> bestMove = mcts.bestChild(MCTS.root);
+            if (bestMove == null) {
+                throw new IllegalStateException("MCTS did not return a move");
+            }
+            state = bestMove.state();
+
+            MCTS.root = new TicTacToeNode(state);
         }
+        System.out.println(state.toString());
         return state;
     }
+
 
     /**
      * This method determines the opening player (the "white" by analogy with chess).
@@ -250,9 +238,9 @@ public class TicTacToe implements Game<TicTacToe> {
 
         @Override
         public String toString() {
-            return "TicTacToe{\n" +
-                    position +
-                    "\n}";
+            return "TicTacToe\n" +
+                           position.render() +
+                           "\n";
         }
 
         public TicTacToeState(Position position) {
