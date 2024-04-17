@@ -18,6 +18,20 @@ public class ConnectFour implements Game<ConnectFour> {
         this.random = random;
     }
 
+
+    public ConnectFour() {
+        this(System.currentTimeMillis());
+    }
+
+    public ConnectFour(long seed) {
+        this(new Random(seed));
+    }
+
+    /**
+     * Secondary constructor which uses the current time as seed.
+     */
+
+
     static ConnectFourPosition startingPosition() {
         return ConnectFourPosition.parsePosition(
                 ". . . . . . .\n" +
