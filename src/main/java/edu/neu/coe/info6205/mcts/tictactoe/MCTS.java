@@ -67,7 +67,7 @@ public class MCTS {
                        c * Math.sqrt(Math.log(node.getParent().playouts()) / (double) node.playouts());
     }
 
-    private int simulate(Node<TicTacToe> node) {
+    int simulate(Node<TicTacToe> node) {
         State<TicTacToe> state = node.state();
         Random random = new Random();
         while (!state.isTerminal()) {
@@ -78,7 +78,7 @@ public class MCTS {
         return state.winner().orElse(0);
     }
 
-    private void backPropagate(Node<TicTacToe> node, int result) {
+    void backPropagate(Node<TicTacToe> node, int result) {
         while (node != null) {
             int playout = node.playouts();
             node.setPlayouts(playout+1);
