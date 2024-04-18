@@ -46,13 +46,13 @@ public class MCTS {
     }
 
     public double ucb1(Node<ConnectFour> node) {
-        double c = Math.sqrt(2);
+        double c = 1.44;
         int playouts = node.playouts();
         if (playouts == 0) {
-            return Double.POSITIVE_INFINITY; // Handle division by zero
+            return Double.POSITIVE_INFINITY;
         }
         return node.wins() / (double) playouts +
-                c * Math.sqrt(Math.log(node.getParent().playouts()) / (double) playouts);
+                       c * Math.sqrt(Math.log(node.getParent().playouts()) / (double) playouts);
     }
 
 
@@ -86,11 +86,12 @@ public class MCTS {
         }
     }
 
+
     public static void main(String[] args) {
         ConnectFour connectFourGame = new ConnectFour();
         root = new ConnectFourNode(connectFourGame.start());
         MCTS mcts = new MCTS(root);
-        mcts.run(100);
+        mcts.run(10000);
         if (root.children().isEmpty()) {
             System.out.println("No moves available.");
         } else {

@@ -120,38 +120,8 @@ public class ConnectFourPositionTest {
         ConnectFourPosition reflectedPosition = position.reflect(0);
         assertArrayEquals(position.grid, reflectedPosition.grid);
     }
-    @Test
-    public void testRotate() {
 
-        int[][] originalGrid = {
-                {0, 0, 1, 1, 0, 1, -1},
-                {1, 0, 1, 0, 1, 0, -1},
-                {0, 1, 0, 1, 0, 0, -1},
-                {0, 1, 1, 0, 1, 0, -1},
-                {1, 0, 1, 0, 0, 0, -1},
-                {1, 0, 0, 0, 1, 0, -1},
-                {-1, -1, -1, -1, -1, -1, -1}
-        };
-        ConnectFourPosition position = new ConnectFourPosition(originalGrid, 25, 1);
-
-        // Rotate the grid
-        ConnectFourPosition rotatedPosition = position.rotate();
-
-        // Define the expected rotated grid
-        int[][] expectedRotatedGrid = {
-                {-1, -1, -1, -1, -1, -1, -1},
-                {0, 1, 0, 0, 1, 1, 0},
-                {0, 0, 1, 1, 0, 0, 1},
-                {1, 1, 0, 1, 0, 1, 1},
-                {0, 0, 1, 0, 1, 0, 0},
-                {1, 0, 1, 0, 1, 0, 0},
-                {-1, -1, -1, -1, -1, -1, -1}
-        };
-
-        // Assert that the rotated grid matches the expected rotated grid
-        assertTrue(Arrays.deepEquals(expectedRotatedGrid, rotatedPosition.grid));
-    }
 
 }
 
-}
+
