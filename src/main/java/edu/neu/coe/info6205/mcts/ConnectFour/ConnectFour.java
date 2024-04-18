@@ -46,23 +46,33 @@ public class ConnectFour implements Game<ConnectFour> {
                         ". . . . . . .", blank);
     }
 
-    State<ConnectFour> runGame() {
+    public State<ConnectFour> runGame() {
         State<ConnectFour> state = start();
         // Initialize MCTS with the starting state
-        MCTS mcts = new MCTS(new ConnectFourNode(state));
-        while (!state.isTerminal()) {
 
-            mcts.run(1000);
-            System.out.println("Player: " + state.player() + " Move");
-            Node<ConnectFour> bestMove = mcts.bestChild(MCTS.root);
-            if (bestMove == null){
-                throw new Error("Best move is null");
+        while (!state.isTerminal()) {
+            if (state.player() == X){
+                MCTS mcts = new MCTS(new ConnectFourNode(state));
+                mcts.run(1000);
+                System.out.println("Player: " + state.player() + " Move");
+                Node<ConnectFour> bestMove = mcts.bestChild(MCTS.root);
+                if (bestMove == null){
+                    throw new Error("Best move is null");
+                }
+                state = bestMove.state();
             }
-            state = bestMove.state();
+            else {
+                // Generate random input
+
+                System.out.println("Player " + state.player() + " (Random) Move:");
+                List<Move<ConnectFour>> legalMoves = new ArrayList<>(state.moves(state.player()));
+                Move<ConnectFour> randomMove = legalMoves.get(random.nextInt(legalMoves.size()));
+                state = state.next(randomMove);
+
+            }
             System.out.println(state);
             MCTS.root = new ConnectFourNode(state);
         }
-        System.out.println(state);
         return state;
     }
 
@@ -87,7 +97,7 @@ public class ConnectFour implements Game<ConnectFour> {
         return X;
     }
 
-    private class ConnectFourState implements State<ConnectFour> {
+    public class ConnectFourState implements State<ConnectFour> {
 
         private final ConnectFourPosition connectFourPosition;
 
@@ -172,23 +182,6 @@ public class ConnectFour implements Game<ConnectFour> {
                 return getMove(); // Recursive call to retry input
             }
             return column;
-        }
-
-        @Override
-        public Move<ConnectFour> chooseMove(int player) {
-            Collection<Move<ConnectFour>> legalMoves = moves(player);
-            int choosenIndex = -1;
-            if (player == X){
-                choosenIndex = getMove();
-            }
-            else {
-                choosenIndex = random.nextInt(legalMoves.size());
-            }
-            Iterator<Move<ConnectFour>> iterator = legalMoves.iterator();
-            for (int i = 0; i < choosenIndex; i++) {
-                iterator.next();
-            }
-            return iterator.next();
         }
 
         @Override

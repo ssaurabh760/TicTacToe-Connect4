@@ -45,23 +45,52 @@ public class TicTacToe implements Game<TicTacToe> {
      *
      * @return the terminal State.
      */
+//    State<TicTacToe> runGame() {
+//        State<TicTacToe> state = start();
+//        MCTS mcts = new MCTS(new TicTacToeNode(state)); // Initialize MCTS with the starting state
+//
+//            while (!state.isTerminal()) {
+//                System.out.println(state.toString());
+//                mcts.run(1000);
+//                Node<TicTacToe> bestMove = mcts.bestChild(MCTS.root);
+//                if (bestMove == null) {
+//                    throw new IllegalStateException("MCTS did not return a move");
+//                }
+//                state = bestMove.state();
+//
+//                MCTS.root = new TicTacToeNode(state);
+//            }
+//        System.out.println(state.toString());
+//        return state;
+//    }
+
     State<TicTacToe> runGame() {
         State<TicTacToe> state = start();
-        MCTS mcts = new MCTS(new TicTacToeNode(state)); // Initialize MCTS with the starting state
+        Random random = new Random(); // Initialize a Random object
 
         while (!state.isTerminal()) {
-            System.out.println(state.toString());
-            mcts.run(1000);
-            Node<TicTacToe> bestMove = mcts.bestChild(MCTS.root);
-            if (bestMove == null) {
-                throw new IllegalStateException("MCTS did not return a move");
-            }
-            state = bestMove.state();
+            System.out.println(state.toString()); // Print the current state
 
-            MCTS.root = new TicTacToeNode(state);
+            // Check if it's MCTS's turn
+            if (state.player() == TicTacToe.X) {
+                MCTS mcts = new MCTS(new TicTacToeNode(state)); // Initialize MCTS with the current state
+                mcts.run(10000); // Run MCTS for a certain number of iterations
+                Node<TicTacToe> bestMove = mcts.bestChild(MCTS.root); // Get the best move from MCTS
+                if (bestMove == null) {
+                    throw new IllegalStateException("MCTS did not return a move");
+                }
+                state = bestMove.state(); // Update the game state with the best move
+            } else { // It's the random player's turn
+                List<Move<TicTacToe>> legalMoves = new ArrayList<>(state.moves(state.player()));
+                Move<TicTacToe> randomMove = legalMoves.get(random.nextInt(legalMoves.size())); // Generate a random move
+                state = state.next(randomMove); // Update the game state with the random move
+            }
+
+            System.out.println(state.toString()); // Print the updated state of the game
         }
-        System.out.println(state.toString());
-        return state;
+
+        System.out.println(state.toString()); // Print the final state of the game
+        return state; // Return the final state
     }
 
 

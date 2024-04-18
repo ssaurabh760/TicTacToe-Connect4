@@ -37,7 +37,7 @@ public class ConnectFourPosition {
         };
     }
 
-    static ConnectFourPosition parsePosition(final String grid, final int last) {
+    public static ConnectFourPosition parsePosition(final String grid, final int last) {
         int[][] matrix = new int[gridRows][gridColumns];
         int count = 0;
         String[] rows = grid.split("\\n", gridRows);
