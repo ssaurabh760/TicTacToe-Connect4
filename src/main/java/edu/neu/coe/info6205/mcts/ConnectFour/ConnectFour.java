@@ -51,15 +51,15 @@ public class ConnectFour implements Game<ConnectFour> {
         // Initialize MCTS with the starting state
         MCTS mcts = new MCTS(new ConnectFourNode(state));
         while (!state.isTerminal()) {
-            System.out.println(state);
-            System.out.println("Player " + state.player() + " Move");
-            mcts.run(10000);
+
+            mcts.run(1000);
+            System.out.println("Player: " + state.player() + " Move");
             Node<ConnectFour> bestMove = mcts.bestChild(MCTS.root);
-            if (bestMove == null) {
-                throw new IllegalStateException("MCTS did not return a move");
+            if (bestMove == null){
+                throw new Error("Best move is null");
             }
             state = bestMove.state();
-
+            System.out.println(state);
             MCTS.root = new ConnectFourNode(state);
         }
         System.out.println(state);
@@ -148,9 +148,7 @@ public class ConnectFour implements Game<ConnectFour> {
         @Override
         public State<ConnectFour> next(Move<ConnectFour> move) {
             ConnectFourMove connectFourMove = (ConnectFourMove) move;
-            int player = connectFourMove.player();
             int col = connectFourMove.column();
-            int[][] newGrid = connectFourPosition.grid.clone();
 
             return new ConnectFourState(connectFourPosition.move(move.player(), col));
         }

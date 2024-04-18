@@ -1,5 +1,7 @@
 package edu.neu.coe.info6205.mcts.ConnectFour;
 
+import edu.neu.coe.info6205.mcts.tictactoe.Position;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -98,6 +100,7 @@ public class ConnectFourPosition {
         if (column < 0 || column >= gridColumns) throw new IllegalArgumentException("Invalid column: " + column);
 
         int[][] newGrid = copyGrid();
+
         for (int i = gridRows - 1; i >= 0; i--) {
             if (newGrid[i][column] == -1) {
                 newGrid[i][column] = player;

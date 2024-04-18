@@ -78,6 +78,7 @@ public class MCTS {
         }
         return node;
     }
+
     public void run(int iterations) {
         for (int i = 0; i < iterations; i++) {
             Node<ConnectFour> node = select(root);
