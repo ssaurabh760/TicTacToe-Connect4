@@ -6,8 +6,13 @@ import edu.neu.coe.info6205.mcts.core.State;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Random;
 
 public class TicTacToeNode implements Node<TicTacToe> {
+    private final Random random = new Random();
+    private Node<TicTacToe> parent;
+    private int wins;
+    private int playouts;
 
     /**
      * @return true if this node is a leaf node (in which case no further exploration is possible).
@@ -47,7 +52,9 @@ public class TicTacToeNode implements Node<TicTacToe> {
      * @param state the State for the new chile.
      */
     public void addChild(State<TicTacToe> state) {
-        children.add(new TicTacToeNode(state));
+        TicTacToeNode child = new TicTacToeNode(state);
+        child.setParent(this);  // Set the parent of the child
+        children.add(child);
     }
 
     /**
@@ -69,6 +76,10 @@ public class TicTacToeNode implements Node<TicTacToe> {
         return wins;
     }
 
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
     /**
      * @return the number of playouts evaluated (including this node). A leaf node will have a playouts value of 1.
      */
@@ -76,26 +87,36 @@ public class TicTacToeNode implements Node<TicTacToe> {
         return playouts;
     }
 
+    public void setPlayouts(int playout) {
+        this.playouts = playout;
+    }
+
+    // Implement parent methods
+    public Node<TicTacToe> getParent() {
+        return parent;
+    }
+
+    public void setParent(Node<TicTacToe> parent) {
+        this.parent = parent;
+    }
+
     public TicTacToeNode(State<TicTacToe> state) {
         this.state = state;
-        children = new ArrayList<>();
+        this.children = new ArrayList<>();
+        this.parent = null;
         initializeNodeData();
     }
 
     private void initializeNodeData() {
         if (isLeaf()) {
-            playouts = 1;
+            this.playouts = 1;
             Optional<Integer> winner = state.winner();
             if (winner.isPresent())
-                wins = 2; // CONSIDER check that the winner is the correct player. We shouldn't need to.
+                this.wins = 2;
             else
-                wins = 1; // a draw.
+                this.wins = 1;
         }
     }
-
     private final State<TicTacToe> state;
     private final ArrayList<Node<TicTacToe>> children;
-
-    private int wins;
-    private int playouts;
 }
