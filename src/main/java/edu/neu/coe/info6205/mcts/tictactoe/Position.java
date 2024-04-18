@@ -146,27 +146,15 @@ public class Position {
      * @return true if there are three cells in a line that are the same and equal to the last player.
      */
     boolean threeInARow() {
-
-
-
         for (int i = 0; i < gridSize; i++) {
-
             if ((projectRow(i)[0] == last && projectRow(i)[1] == last && projectRow(i)[2] == last) ||
-
-                        (projectCol(i)[0] == last && projectCol(i)[1] == last && projectCol(i)[2] == last)) {
-
+                        (projectCol(i)[0] == last && projectCol(i)[1] == last && projectCol(i)[2] == last))
+            {
                 return true;
-
             }
-
         }
-
-
-
         return (grid[0][0] == last && grid[1][1] == last && grid[2][2] == last) ||
-
                        (grid[0][2] == last && grid[1][1] == last && grid[2][0] == last);
-
     }
 
 

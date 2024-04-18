@@ -39,7 +39,7 @@ public class MCTS {
             backPropagate(node, result);
         }
     }
-    private Node<TicTacToe> select(Node<TicTacToe> node) {
+    Node<TicTacToe> select(Node<TicTacToe> node) {
         while (!node.isLeaf()) {
             if (!node.children().isEmpty()) {
                 node = bestChild(node);
@@ -67,7 +67,7 @@ public class MCTS {
                        c * Math.sqrt(Math.log(node.getParent().playouts()) / (double) node.playouts());
     }
 
-    private int simulate(Node<TicTacToe> node) {
+    int simulate(Node<TicTacToe> node) {
         State<TicTacToe> state = node.state();
         Random random = new Random();
         while (!state.isTerminal()) {
@@ -75,10 +75,10 @@ public class MCTS {
             Move<TicTacToe> move = moves.get(random.nextInt(moves.size()));
             state = state.next(move);
         }
-        return state.winner().orElse(0);
+        return state.winner().orElse(-1);
     }
 
-    private void backPropagate(Node<TicTacToe> node, int result) {
+    void backPropagate(Node<TicTacToe> node, int result) {
         while (node != null) {
             int playout = node.playouts();
             node.setPlayouts(playout+1);
