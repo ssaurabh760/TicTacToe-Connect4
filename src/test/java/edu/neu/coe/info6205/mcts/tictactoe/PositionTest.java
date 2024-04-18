@@ -52,13 +52,16 @@ public class PositionTest {
         assertArrayEquals(new int[]{2, 0}, moves.get(4));
         assertArrayEquals(new int[]{2, 1}, moves.get(5));
     }
-
     @Test
     public void testReflect() {
     }
 
     @Test
     public void testRotate() {
+        String grid = "X . .\n. O .\n. . X";
+        Position target = Position.parsePosition(grid, 1);
+        Position rotated = target.rotate();
+        assertEquals(". . X\n. O .\nX . .", rotated.render());
     }
 
     @Test
