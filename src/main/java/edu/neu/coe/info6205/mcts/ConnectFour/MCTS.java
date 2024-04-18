@@ -21,7 +21,6 @@ public class MCTS {
         while (node != null) {
             int playout = node.playouts();
             node.setPlayouts(playout+1);
-
             int win = node.wins();
             if ((node.state().player() == 1 && result == 1) ||
                     (node.state().player() == 0 && result == -1)) {

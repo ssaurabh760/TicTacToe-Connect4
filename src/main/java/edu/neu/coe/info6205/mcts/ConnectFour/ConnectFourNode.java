@@ -75,7 +75,7 @@ public class ConnectFourNode implements Node<ConnectFour> {
 
     @Override
     public void setWins(int wins) {
-
+        this.wins = wins;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ConnectFourNode implements Node<ConnectFour> {
 
     @Override
     public void setPlayouts(int playout) {
-
+        this.playouts = playout;
     }
 
     @Override
