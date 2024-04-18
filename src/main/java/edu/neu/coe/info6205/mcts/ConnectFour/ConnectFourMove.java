@@ -12,6 +12,8 @@ public class ConnectFourMove implements Move<ConnectFour> {
         this.column = column;
     }
 
+
+
 //    public int getPlayer() {
 //        return player;
 //    }

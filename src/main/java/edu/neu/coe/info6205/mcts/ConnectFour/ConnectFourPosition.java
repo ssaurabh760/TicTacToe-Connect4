@@ -1,5 +1,7 @@
 package edu.neu.coe.info6205.mcts.ConnectFour;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ConnectFourPosition {
@@ -77,4 +79,80 @@ public class ConnectFourPosition {
     public boolean full() {
         return count == gridRows * gridColumns;
     }
+
+
+    // Testing
+
+    private int[][] copyGrid() {
+        int[][] result = new int[gridRows][gridColumns];
+        for (int i = 0; i < gridRows; i++) {
+            System.arraycopy(grid[i], 0, result[i], 0, gridColumns);
+        }
+        return result;
+    }
+
+
+    public ConnectFourPosition move(int player, int column) {
+        if (full()) throw new RuntimeException("Position is full");
+        if (player == last) throw new RuntimeException("Consecutive moves by the same player: " + player);
+        if (column < 0 || column >= gridColumns) throw new IllegalArgumentException("Invalid column: " + column);
+
+        int[][] newGrid = copyGrid();
+        for (int i = gridRows - 1; i >= 0; i--) {
+            if (newGrid[i][column] == -1) {
+                newGrid[i][column] = player;
+                return new ConnectFourPosition(newGrid, count + 1, player);
+            }
+        }
+        throw new RuntimeException("Column is full: " + column);
+    }
+
+    public List<Integer> moves(int player) {
+        if (player == last) throw new RuntimeException("Consecutive moves by the same player: " + player);
+
+        List<Integer> possibleMoves = new ArrayList<>();
+        for (int column = 0; column < gridColumns; column++) {
+            if (grid[0][column] == -1) {
+                possibleMoves.add(column);
+            }
+        }
+        return possibleMoves;
+    }
+
+
+    public ConnectFourPosition reflect(int axis) {
+        int[][] newGrid = copyGrid();
+        switch (axis) {
+            case 0: // Reflect horizontally
+                for (int i = 0; i < gridRows; i++) {
+                    for (int j = 0; j < gridColumns / 2; j++) {
+                        int temp = newGrid[i][j];
+                        newGrid[i][j] = newGrid[i][gridColumns - 1 - j];
+                        newGrid[i][gridColumns - 1 - j] = temp;
+                    }
+                }
+                break;
+            case 1: // Reflect vertically
+                for (int i = 0; i < gridRows / 2; i++) {
+                    int[] tempRow = newGrid[i];
+                    newGrid[i] = newGrid[gridRows - 1 - i];
+                    newGrid[gridRows - 1 - i] = tempRow;
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid axis for reflection: " + axis);
+        }
+        return new ConnectFourPosition(newGrid, count, last);
+    }
+
+    public ConnectFourPosition rotate() {
+        int[][] newGrid = new int[gridColumns][gridRows];
+        for (int i = 0; i < gridColumns; i++) {
+            for (int j = 0; j < gridRows; j++) {
+                newGrid[i][j] = grid[gridRows - 1 - j][i];
+            }
+        }
+        return new ConnectFourPosition(newGrid, count, last);
+    }
+
 }

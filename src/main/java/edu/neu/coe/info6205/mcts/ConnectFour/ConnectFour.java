@@ -1,8 +1,12 @@
 package edu.neu.coe.info6205.mcts.ConnectFour;
 
+
 import edu.neu.coe.info6205.mcts.core.Game;
 import edu.neu.coe.info6205.mcts.core.Move;
+import edu.neu.coe.info6205.mcts.core.Node;
 import edu.neu.coe.info6205.mcts.core.State;
+import edu.neu.coe.info6205.mcts.ConnectFour.MCTS;
+import edu.neu.coe.info6205.mcts.tictactoe.TicTacToe;
 
 import java.util.*;
 
@@ -42,21 +46,35 @@ public class ConnectFour implements Game<ConnectFour> {
                         ". . . . . . .", blank);
     }
 
-    public static void main(String[] args) {
-        ConnectFour connectFour = new ConnectFour(new Random());
-        State<ConnectFour> state = connectFour.start();
+    State<ConnectFour> runGame() {
+        State<ConnectFour> state = start();
+        // Initialize MCTS with the starting state
+        MCTS mcts = new MCTS(new ConnectFourNode(state));
         while (!state.isTerminal()) {
             System.out.println(state);
-            Move<ConnectFour> move = state.chooseMove(state.player());
-            state = state.next(move);
+            System.out.println("Player " + state.player() + " Move");
+            mcts.run(10000);
+            Node<ConnectFour> bestMove = mcts.bestChild(MCTS.root);
+            if (bestMove == null) {
+                throw new IllegalStateException("MCTS did not return a move");
+            }
+            state = bestMove.state();
+
+            MCTS.root = new ConnectFourNode(state);
         }
         System.out.println(state);
-        Optional<Integer> winner = state.winner();
-        if (winner.isPresent()) {
-            System.out.println("Winner: Player " + (winner.get() == 1 ? "X" : "O"));
-        } else {
-            System.out.println("Draw!");
+        return state;
+    }
+
+    public static void main(String[] args) {
+
+        State<ConnectFour> state = new ConnectFour().runGame();
+        if (state.winner().isPresent()) {
+            int winner = state.winner().get();
+            if(winner == 1) System.out.println("ConnectFour: winner is: X");
+            else System.out.println("ConnectFour: winner is: 0");
         }
+        else System.out.println("ConnectFour: draw");
     }
 
     @Override
@@ -116,8 +134,10 @@ public class ConnectFour implements Game<ConnectFour> {
 
         @Override
         public Collection<Move<ConnectFour>> moves(int player) {
+            if (player == connectFourPosition.last) throw new RuntimeException("consecutive moves by same player: " + player);
+            List<Integer> moves = connectFourPosition.moves(player);
             ArrayList<Move<ConnectFour>> legalMoves = new ArrayList<>();
-            for (int col = 0; col < ConnectFourPosition.gridColumns; col++) {
+            for (Integer col: moves) {
                 if (connectFourPosition.grid[0][col] == blank) {
                     legalMoves.add(new ConnectFourMove(player, col));
                 }
@@ -131,13 +151,8 @@ public class ConnectFour implements Game<ConnectFour> {
             int player = connectFourMove.player();
             int col = connectFourMove.column();
             int[][] newGrid = connectFourPosition.grid.clone();
-            for (int row = ConnectFourPosition.gridRows - 1; row >= 0; row--) {
-                if (newGrid[row][col] == blank) {
-                    newGrid[row][col] = player;
-                    break;
-                }
-            }
-            return new ConnectFourState(new ConnectFourPosition(newGrid, connectFourPosition.count + 1, player));
+
+            return new ConnectFourState(connectFourPosition.move(move.player(), col));
         }
 
         @Override

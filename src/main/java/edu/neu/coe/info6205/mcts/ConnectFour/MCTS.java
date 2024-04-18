@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class MCTS {
 
-    private static Node<ConnectFour> root;
+    static Node<ConnectFour> root;
 
     public MCTS(Node<ConnectFour> root) {
         MCTS.root = root;
@@ -48,14 +48,20 @@ public class MCTS {
 
     private double ucb1(Node<ConnectFour> node) {
         double c = Math.sqrt(2);
-        return node.wins() / (double) node.playouts() +
-                c * Math.sqrt(Math.log(node.getParent().playouts()) / (double) node.playouts());
+        int playouts = node.playouts();
+        if (playouts == 0) {
+            return Double.POSITIVE_INFINITY; // Handle division by zero
+        }
+        return node.wins() / (double) playouts +
+                c * Math.sqrt(Math.log(node.getParent().playouts()) / (double) playouts);
     }
+
 
     Node<ConnectFour> bestChild(Node<ConnectFour> node) {
         if (node.children().isEmpty()) {
             return null;
         }
+
         return node.children().stream()
                 .max(Comparator.comparingDouble(this::ucb1))
                 .orElseThrow(() -> new IllegalStateException("No best child found, but children list is not empty"));
@@ -81,23 +87,20 @@ public class MCTS {
     }
 
     public static void main(String[] args) {
-//        TicTacToe game = new TicTacToe();
-//        root = new TicTacToeNode(game.start());
-//        MCTS mcts = new MCTS(root);
-//        mcts.run(100);
-//        if (root.children().isEmpty()) {
-//            System.out.println("No moves available.");
-//        } else {
-//            Node<TicTacToe> bestMove = mcts.bestChild(root);
-//            if (bestMove != null) {
-//                System.out.println("Recommended move: " + bestMove.state().toString());
-//            } else {
-//                System.out.println("No best move could be determined.");
-//            }
-//        }
         ConnectFour connectFourGame = new ConnectFour();
         root = new ConnectFourNode(connectFourGame.start());
         MCTS mcts = new MCTS(root);
+        mcts.run(100);
+        if (root.children().isEmpty()) {
+            System.out.println("No moves available.");
+        } else {
+            Node<ConnectFour> bestMove = mcts.bestChild(root);
+            if (bestMove != null) {
+                System.out.println("Recommended move: " + bestMove.state().toString());
+            } else {
+                System.out.println("No best move could be determined.");
+            }
+        }
 
 
 

@@ -6,6 +6,7 @@ import edu.neu.coe.info6205.mcts.core.State;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Random;
 
 public class ConnectFourNode implements Node<ConnectFour> {
 
@@ -13,6 +14,9 @@ public class ConnectFourNode implements Node<ConnectFour> {
     private final ArrayList<Node<ConnectFour>> children;
     private int wins;
     private int playouts;
+
+    private final Random random = new Random();
+    private Node<ConnectFour> parent;
 
     public ConnectFourNode(State<ConnectFour> state) {
         this.state = state;
@@ -41,8 +45,17 @@ public class ConnectFourNode implements Node<ConnectFour> {
     }
 
     @Override
+    public void explore() {
+        Node.super.explore();
+    }
+
+
+
+    @Override
     public void addChild(State<ConnectFour> state) {
-        children.add(new ConnectFourNode(state));
+        ConnectFourNode child = new ConnectFourNode(state);
+        child.setParent(this);  // Set the parent of the child
+        children.add(child);
     }
 
     @Override
@@ -61,8 +74,28 @@ public class ConnectFourNode implements Node<ConnectFour> {
     }
 
     @Override
+    public void setWins(int wins) {
+
+    }
+
+    @Override
     public int playouts() {
         return playouts;
+    }
+
+    @Override
+    public void setPlayouts(int playout) {
+
+    }
+
+    @Override
+    public Node<ConnectFour> getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(Node<ConnectFour> parent) {
+        this.parent = parent;
     }
 
     private void initializeNodeData() {
