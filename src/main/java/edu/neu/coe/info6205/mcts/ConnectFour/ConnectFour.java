@@ -48,7 +48,7 @@ public class ConnectFour implements Game<ConnectFour> {
         boolean mctsWon = false;
         while (!state.isTerminal()) {
             if (mctsTurn) {
-                mcts.run(10000);
+                mcts.run(100);
                 System.out.println("Player: " + state.player() + " Move");
                 Node<ConnectFour> bestMove = mcts.bestChild(MCTS.root);
                 if (bestMove == null) {
@@ -111,7 +111,7 @@ public class ConnectFour implements Game<ConnectFour> {
 
     private boolean mctsTurn = true; // Flag to alternate between MCTS and random moves
 
-    private class ConnectFourState implements State<ConnectFour> {
+    public class ConnectFourState implements State<ConnectFour> {
 
         private final ConnectFourPosition connectFourPosition;
 

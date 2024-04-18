@@ -108,4 +108,12 @@ public class ConnectFourNode implements Node<ConnectFour> {
                 wins = 1; // A draw is worth 1 point.
         }
     }
+    public void incrementPlayouts() {
+        this.playouts++;
+    }
+
+
+    public void addWins(int wins) {
+        this.wins += wins;
+    }
 }
