@@ -17,7 +17,7 @@ public class MCTS {
         MCTS.root = root;
     }
 
-    private void backPropagate(Node<ConnectFour> node, int result) {
+    public void backPropagate(Node<ConnectFour> node, int result) {
         while (node != null) {
             int playout = node.playouts();
             node.setPlayouts(playout+1);
@@ -34,7 +34,7 @@ public class MCTS {
         }
     }
 
-    private int simulate(Node<ConnectFour> node) {
+    public int simulate(Node<ConnectFour> node) {
         State<ConnectFour> state = node.state();
         Random random = new Random();
         while (!state.isTerminal()) {
@@ -45,7 +45,7 @@ public class MCTS {
         return state.winner().orElse(0);
     }
 
-    private double ucb1(Node<ConnectFour> node) {
+    public double ucb1(Node<ConnectFour> node) {
         double c = Math.sqrt(2);
         int playouts = node.playouts();
         if (playouts == 0) {
@@ -56,7 +56,7 @@ public class MCTS {
     }
 
 
-    Node<ConnectFour> bestChild(Node<ConnectFour> node) {
+    public Node<ConnectFour> bestChild(Node<ConnectFour> node) {
         if (node.children().isEmpty()) {
             return null;
         }
@@ -66,7 +66,7 @@ public class MCTS {
                 .orElseThrow(() -> new IllegalStateException("No best child found, but children list is not empty"));
     }
 
-    private Node<ConnectFour> select(Node<ConnectFour> node) {
+    public Node<ConnectFour> select(Node<ConnectFour> node) {
         while (!node.isLeaf()) {
             if (!node.children().isEmpty()) {
                 node = bestChild(node);
