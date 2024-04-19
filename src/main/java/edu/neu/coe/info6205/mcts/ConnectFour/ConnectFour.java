@@ -45,7 +45,6 @@ public class ConnectFour implements Game<ConnectFour> {
         State<ConnectFour> state = start();
         // Initialize MCTS with the starting state
         MCTS mcts = new MCTS(new ConnectFourNode(state));
-        boolean mctsWon = false;
         while (!state.isTerminal()) {
             if (mctsTurn) {
                 mcts.run(100);
@@ -71,17 +70,7 @@ public class ConnectFour implements Game<ConnectFour> {
             mctsTurn = !mctsTurn; // Switch turn
         }
         System.out.println(state);
-        if (state.winner().isPresent()) {
-            int winner = state.winner().get();
-            if (winner == X) {
-                System.out.println("ConnectFour: Winner is: X (MCTS)");
-                mctsWon = true;
-            } else {
-                System.out.println("ConnectFour: Winner is: O (Random)");
-            }
-        } else {
-            System.out.println("ConnectFour: Draw");
-        }
+
         return state;
     }
 
@@ -90,9 +79,9 @@ public class ConnectFour implements Game<ConnectFour> {
         if (state.winner().isPresent()) {
             int winner = state.winner().get();
             if (winner == X) {
-                System.out.println("ConnectFour: Winner is: X");
+                System.out.println("ConnectFour: Winner is: X (MCTS)");
             } else {
-                System.out.println("ConnectFour: Winner is: O");
+                System.out.println("ConnectFour: Winner is: O (Random)");
             }
         } else {
             System.out.println("ConnectFour: Draw");
