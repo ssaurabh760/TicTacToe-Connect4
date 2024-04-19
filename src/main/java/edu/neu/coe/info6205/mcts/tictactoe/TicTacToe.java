@@ -48,19 +48,55 @@ public class TicTacToe implements Game<TicTacToe> {
     State<TicTacToe> runGame() {
         State<TicTacToe> state = start();
         MCTS mcts = new MCTS(new TicTacToeNode(state)); // Initialize MCTS with the starting state
+        Random random = new Random();
 
         while (!state.isTerminal()) {
             System.out.println(state.toString());
-            mcts.run(1000);
+
+            // MCTS move
+            mcts.run(40);
             Node<TicTacToe> bestMove = mcts.bestChild(MCTS.root);
             if (bestMove == null) {
                 throw new IllegalStateException("MCTS did not return a move");
             }
             state = bestMove.state();
+            System.out.println("MCTS move:");
+            System.out.println(state);
+
+            if (state.isTerminal()) {
+                break;
+            }
+
+            // Random move
+            Collection<Move<TicTacToe>> legalMoves = state.moves(state.player());
+            Move<TicTacToe> randomMove = legalMoves.stream().skip(random.nextInt(legalMoves.size())).findFirst().orElse(null);
+            if (randomMove == null) {
+                throw new RuntimeException("Random move is null");
+            }
+            state = state.next(randomMove);
+            System.out.println("Random move:");
+            System.out.println(state);
+
+            if (state.isTerminal()) {
+                break;
+            }
 
             MCTS.root = new TicTacToeNode(state);
         }
+
         System.out.println(state.toString());
+
+        Optional<Integer> winner = state.winner();
+        if (winner.isPresent()) {
+            if (winner.get() == 1) {
+                System.out.println("MCTS won!");
+            } else {
+                System.out.println("Random won!");
+            }
+        } else {
+            System.out.println("It's a draw!");
+        }
+
         return state;
     }
 
