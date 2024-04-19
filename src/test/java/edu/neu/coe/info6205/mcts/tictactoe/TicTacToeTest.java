@@ -1,5 +1,6 @@
 package edu.neu.coe.info6205.mcts.tictactoe;
 
+import edu.neu.coe.info6205.mcts.ConnectFour.ConnectFour;
 import edu.neu.coe.info6205.mcts.core.State;
 import org.junit.Test;
 
@@ -10,6 +11,26 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 public class TicTacToeTest {
+
+    @Test
+    public void measureAverageGameTime() {
+        int numGames = 100; // Number of games to run for measuring average time
+        long totalGameTime = 0;
+
+        for (int i = 0; i < numGames; i++) {
+            long seed = System.currentTimeMillis(); // Using current time as seed for randomness
+            TicTacToe target = new TicTacToe(seed);
+            long startTime = System.nanoTime();
+            State<TicTacToe> state = target.runGame();
+            long endTime = System.nanoTime();
+            long elapsedTime = endTime - startTime;
+            totalGameTime += elapsedTime;
+        }
+
+        long averageTimeNano = totalGameTime / numGames;
+        double averageTimeMillis = averageTimeNano / 1_000_000.0; // Convert nanoseconds to milliseconds
+        System.out.println("Average game time over " + numGames + " games: " + averageTimeMillis + " milliseconds");
+    }
 
     /**
      *

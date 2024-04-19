@@ -40,6 +40,27 @@ public class ConnectFourTest {
     }
 
     @Test
+    public void measureAverageGameTime() {
+        int numGames = 100; // Number of games to run for measuring average time
+        long totalGameTime = 0;
+
+        for (int i = 0; i < numGames; i++) {
+            long seed = System.currentTimeMillis(); // Using current time as seed for randomness
+            ConnectFour target = new ConnectFour(seed);
+            long startTime = System.nanoTime();
+            State<ConnectFour> state = target.runGame();
+            long endTime = System.nanoTime();
+            long elapsedTime = endTime - startTime;
+            totalGameTime += elapsedTime;
+        }
+
+        long averageTimeNano = totalGameTime / numGames;
+        double averageTimeMillis = averageTimeNano / 1_000_000.0; // Convert nanoseconds to milliseconds
+        originalOut.println("Average game time over " + numGames + " games: " + averageTimeMillis + " milliseconds");
+    }
+
+
+    @Test
     public void runGame() {
         long seed = 8L;
         ConnectFour target = new ConnectFour(seed); // games run here will all be deterministic.
