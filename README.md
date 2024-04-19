@@ -25,8 +25,11 @@ MCTS is a heuristic search algorithm used in decision processes, particularly in
 To run the project, follow these steps:
 
 Clone the repository to your local machine.
+
 Navigate to the project directory. `cd ConnectFour`
+
 Compile the Java files using the Java compiler.
+
 Run the main class to start the game.
    
 
