@@ -21,6 +21,15 @@ MCTS is a heuristic search algorithm used in decision processes, particularly in
 3. **Simulation:** Perform a simulation (playout) from the selected node until a terminal state is reached.
 4. **Backpropagation:** Update the statistics of all nodes visited during the simulation, such as wins and total playouts.
 
+## Installation
+To run the project, follow these steps:
+
+Clone the repository to your local machine.
+Navigate to the project directory. `cd ConnectFour`
+Compile the Java files using the Java compiler.
+Run the main class to start the game.
+   
+
 In our implementation, the MCTS algorithm is used to make intelligent moves in TicTacToe and ConnectFour games, competing against a random player.
 
 ## Test Cases
