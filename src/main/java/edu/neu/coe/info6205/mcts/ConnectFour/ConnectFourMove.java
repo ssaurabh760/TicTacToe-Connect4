@@ -13,15 +13,6 @@ public class ConnectFourMove implements Move<ConnectFour> {
     }
 
 
-
-//    public int getPlayer() {
-//        return player;
-//    }
-
-//    public int getColumn() {
-//        return column;
-//    }
-
     @Override
     public int player() {
         return player;

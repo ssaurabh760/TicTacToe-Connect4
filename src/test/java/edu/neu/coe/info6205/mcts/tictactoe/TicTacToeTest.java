@@ -58,21 +58,17 @@ public class TicTacToeTest {
 
     @Test
     public void testMain() {
-        // Redirect console output for testing
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        // Run the main method
         String[] args = {};
         TicTacToe.main(args);
 
-        // Get the output from the console
         String output = outputStream.toString().trim();
 
-        // Assert that the output matches expectations
         assertTrue(output.contains("TicTacToe: winner is:") || output.contains("TicTacToe: draw"));
 
-        // Reset console output
         System.setOut(System.out);
     }
 
@@ -88,14 +84,11 @@ public class TicTacToeTest {
 
     @Test
     public void testPosition() {
-        // Create a TicTacToeState object with a specific position
         Position expectedPosition = Position.parsePosition("X . .\n. O .\n. . X", TicTacToe.blank);
         TicTacToe.TicTacToeState ticTacToeState = new TicTacToe().new TicTacToeState(expectedPosition);
 
-        // Get the position using the position() method
         Position actualPosition = ticTacToeState.position();
 
-        // Assert that the actual position matches the expected position
         assertEquals(expectedPosition, actualPosition);
     }
 

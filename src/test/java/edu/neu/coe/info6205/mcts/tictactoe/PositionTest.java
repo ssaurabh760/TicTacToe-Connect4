@@ -189,7 +189,7 @@ public class PositionTest {
         int[][] expectedSwappedGrid = {
                 {0, 0, -1},
                 {0, -1, 1},
-                {-1, -1, 1} // Corrected the expected value at [2][2] from 1 to 0
+                {-1, -1, 1}
         };
         assertArrayEquals(expectedSwappedGrid, position.grid);
     }

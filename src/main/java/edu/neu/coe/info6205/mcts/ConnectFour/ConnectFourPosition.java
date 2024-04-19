@@ -148,16 +148,6 @@ public class ConnectFourPosition {
         return new ConnectFourPosition(newGrid, count, last);
     }
 
-//    public ConnectFourPosition rotate() {
-//        int[][] newGrid = new int[gridColumns][gridRows];
-//        for (int i = 0; i < gridColumns; i++) {
-//            for (int j = 0; j < gridRows; j++) {
-//                newGrid[i][j] = grid[gridRows - 1 - j][i];
-//            }
-//        }
-//        return new ConnectFourPosition(newGrid, count, last);
-//    }
-
 
 
 
