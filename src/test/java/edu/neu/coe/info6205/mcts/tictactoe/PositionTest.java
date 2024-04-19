@@ -152,4 +152,45 @@ public class PositionTest {
         Position target = Position.parsePosition("X . .\n. O .\n. . X", 1);
         assertEquals("1,-1,-1\n-1,0,-1\n-1,-1,1", target.toString());
     }
+
+    @Test(expected = RuntimeException.class)
+    public void testReflectInvalidAxis() {
+        Position position = Position.parsePosition(
+                "X O .\n" +
+                        "O . X\n" +
+                        ". . X\n", 1);
+        position.reflect(2); // Invalid axis should throw RuntimeException
+    }
+
+    @Test
+    public void testHashCode() {
+        Position position1 = Position.parsePosition(
+                "X O .\n" +
+                        "O . X\n" +
+                        ". . X\n", 1);
+        Position position2 = Position.parsePosition(
+                "X O .\n" +
+                        "O . X\n" +
+                        ". . X\n", 1);
+        assertEquals(position1.hashCode(), position2.hashCode());
+    }
+
+    @Test
+    public void testSwap() {
+        int[][] initialGrid = {
+                {1, 0, -1},
+                {0, -1, 1},
+                {-1, -1, 0}
+        };
+        Position position = new Position(initialGrid, 5, 1);
+
+        position.swap(position.grid, 0, 0, 2, 2);
+
+        int[][] expectedSwappedGrid = {
+                {0, 0, -1},
+                {0, -1, 1},
+                {-1, -1, 1} // Corrected the expected value at [2][2] from 1 to 0
+        };
+        assertArrayEquals(expectedSwappedGrid, position.grid);
+    }
 }

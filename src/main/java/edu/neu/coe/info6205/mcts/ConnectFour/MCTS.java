@@ -86,24 +86,4 @@ public class MCTS {
         }
     }
 
-
-    public static void main(String[] args) {
-        ConnectFour connectFourGame = new ConnectFour();
-        root = new ConnectFourNode(connectFourGame.start());
-        MCTS mcts = new MCTS(root);
-        mcts.run(10000);
-        if (root.children().isEmpty()) {
-            System.out.println("No moves available.");
-        } else {
-            Node<ConnectFour> bestMove = mcts.bestChild(root);
-            if (bestMove != null) {
-                System.out.println("Recommended move: " + bestMove.state().toString());
-            } else {
-                System.out.println("No best move could be determined.");
-            }
-        }
-
-
-
-    }
 }
