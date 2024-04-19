@@ -254,7 +254,7 @@ public class Position {
         xxx = new int[]{last, last, last};
     }
 
-    private int[][] copyGrid() {
+    int[][] copyGrid() {
         int[][] result = new int[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++)
             result[i] = Arrays.copyOf(grid[i], gridSize);
@@ -278,13 +278,13 @@ public class Position {
      * @param i2     second row.
      * @param j2     second column.
      */
-    private void swap(int[][] matrix, int i1, int j1, int i2, int j2) {
+    void swap(int[][] matrix, int i1, int j1, int i2, int j2) {
         int temp = matrix[i1][j1];
         matrix[i1][j1] = matrix[i2][j2];
         matrix[i2][j2] = temp;
     }
 
-    private final int[][] grid;
+    final int[][] grid;
     final int last;
     private final int count;
     private final static int gridSize = 3;

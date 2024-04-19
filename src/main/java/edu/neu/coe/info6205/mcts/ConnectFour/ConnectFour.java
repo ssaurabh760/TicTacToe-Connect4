@@ -182,37 +182,6 @@ public class ConnectFour implements Game<ConnectFour> {
             return moves(player).iterator();
         }
 
-        @Override
-        public Move<ConnectFour> chooseMove(int player) {
-            Collection<Move<ConnectFour>> legalMoves = moves(player);
-            int chosenIndex = -1;
-            if (player == X) {
-                chosenIndex = getMove();
-            } else {
-                chosenIndex = random.nextInt(legalMoves.size());
-            }
-            Iterator<Move<ConnectFour>> iterator = legalMoves.iterator();
-            for (int i = 0; i < chosenIndex; i++) {
-                iterator.next();
-            }
-            return iterator.next();
-        }
-
-        private final Scanner scanner = new Scanner(System.in);
-
-        public int getMove() {
-            System.out.print("Enter column number (0-6): ");
-            while (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.next(); // Clear the invalid input
-            }
-            int column = scanner.nextInt();
-            if (column < 0 || column > 6) {
-                System.out.println("Invalid column. Please enter a number between 0 and 6.");
-                return getMove(); // Recursive call to retry input
-            }
-            return column;
-        }
 
         @Override
         public String toString() {

@@ -14,24 +14,6 @@ import java.util.Random;
 public class MCTS {
     public static TicTacToeNode root;
 
-    public static void main(String[] args) {
-        TicTacToe game = new TicTacToe();
-        root = new TicTacToeNode(game.start());
-        MCTS mcts = new MCTS(root);
-        mcts.run(100);
-        if (root.children().isEmpty()) {
-            System.out.println("No moves available.");
-        } else {
-            Node<TicTacToe> bestMove = mcts.bestChild(root);
-            if (bestMove != null) {
-                System.out.println("Recommended move: " + bestMove.state().toString());
-            } else {
-                System.out.println("No best move could be determined.");
-            }
-        }
-
-        // This is where you process the MCTS to try to win the game.
-    }
     public void run(int iterations) {
         for (int i = 0; i < iterations; i++) {
             Node<TicTacToe> node = select(root);
